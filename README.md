@@ -1,7 +1,7 @@
 # Guild Protocol
 
 ## Introduction
-### The guild protocol is a blockchain based freelancing platform that utilizes decentralization and automated smart contracts to cut out the middle-man between client and freelancer. It is a single-token system that uses Guild Tokens(GT) to incentivize freelancers to provide quality work. Third parties are also incentivized to vet the work done with these same tokens. Third parties are decided on based on a Proof of Stake consensus algorithm.
+### The guild protocol is a blockchain based freelancing platform that utilizes decentralization and automated smart contracts to cut out unwanted fees while still maintaining a relationship between client and freelancer. It is a single-token system that uses Guild Tokens(GT) to incentivize freelancers to provide quality work. Third parties are also incentivized to vet the work done with these same tokens. Third parties are decided on based on a Proof of Stake consensus algorithm.
 
 ## Client-side features
 ### * The client can create a proposal with an appropriate bounty amount.
