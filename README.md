@@ -6,9 +6,9 @@
 ## Client-side features
  * The client can create a proposal with an appropriate bounty amount.
  * The client has the option to vet the bidding freelancers personally or can assign a third party to vet for them. - GT is paid by the client.
- * After the client selects the freelancer the proposal is finalized by putting the agreed upon bounty amount into the contract.
+ * After the client selects the freelancer the proposal is finalized by putting the agreed upon bounty amount into the contract. Client can decide on either an hourly or milestone based contract.
+ * In the case of hourly contracts the payments are released every week and require the client to fund their proposal weekly. We utilize Chainlink's time based automation to accomplish this.
  *Client can end the contract after work is done, the payment is then released to the freelancer.
- *Hourly payments will be introduced. For the sake of simplicity the first version of this project will have only milestone based payments.
  *Client-freelancer disputes are to be handled by the assigned third party. A freelancer/client address can be blacklisted after it has been flagged by three or more assigned third parties.
  *2.5% of the bounty is acquired by the assigned third party.
 
