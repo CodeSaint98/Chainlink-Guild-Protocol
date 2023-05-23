@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
+import "./GuildToken.sol";
+import '@uniswap/lib/contracts/libraries/TransferHelper.sol';
+import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 contract ValidatorSelection {
     struct Validator {
         address validatorAddress;
@@ -9,19 +11,33 @@ contract ValidatorSelection {
 
     mapping(address => Validator) public validators;
     address[] public validatorQueue; // Priority queue to hold validator addresses
+    address public guild_token_address;
 
     // Function to add a validator
     function addValidator(address _validatorAddress, uint256 _stakingBalance) external {
         require(validators[_validatorAddress].validatorAddress == address(0), "Validator already exists");
-        
+        require(_stakingBalance > 0 , "staking balance has to be above 0");
+        TransferHelper.safeTransferFrom(
+            guild_token_address,_validatorAddress,address(this), _stakingBalance
+        );
         validators[_validatorAddress] = Validator(_validatorAddress, _stakingBalance);
         insertIntoQueue(_validatorAddress);
     }
 
     // Function to update the staking balance of a validator
+    // Needs approval incase the new staking balance is smaller than the old one
     function updateStakingBalance(address _validatorAddress, uint256 _newStakingBalance) external {
         require(validators[_validatorAddress].validatorAddress != address(0), "Validator does not exist");
-        
+        require(_newStakingBalance > 0, "staking balance has to be above 0");
+        uint _stakingBalance = validators[_validatorAddress].stakingBalance;
+        if(_newStakingBalance < _stakingBalance){
+             TransferHelper.safeTransfer(guild_token_address, _validatorAddress, (_stakingBalance-_newStakingBalance));
+        }
+        else if(_newStakingBalance > _stakingBalance){
+            TransferHelper.safeTransferFrom(
+            guild_token_address,_validatorAddress,address(this), (_stakingBalance-_newStakingBalance)
+        );
+        }
         removeValidatorFromQueue(_validatorAddress);
         validators[_validatorAddress].stakingBalance = _newStakingBalance;
         insertIntoQueue(_validatorAddress);
@@ -30,7 +46,7 @@ contract ValidatorSelection {
     // Function to remove a validator
     function removeValidator(address _validatorAddress) external {
         require(validators[_validatorAddress].validatorAddress != address(0), "Validator does not exist");
-        
+        TransferHelper.safeTransfer(guild_token_address, _validatorAddress, validators[_validatorAddress].stakingBalance);
         removeValidatorFromQueue(_validatorAddress);
         delete validators[_validatorAddress];
     }
