@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import "./GuildToken.sol";
 import '@uniswap/lib/contracts/libraries/TransferHelper.sol';
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
-contract ValidatorSelection {
+contract ValidatorSelection is ReentrancyGuard{
     struct Validator {
         address validatorAddress;
         uint256 stakingBalance;
@@ -13,8 +13,13 @@ contract ValidatorSelection {
     address[] public validatorQueue; // Priority queue to hold validator addresses
     address public guild_token_address;
 
+    constructor (address _guild_token_address){
+        require(_guild_token_address != address(0), "Zero address detected");
+        guild_token_address = _guild_token_address;
+    }
+
     // Function to add a validator
-    function addValidator(address _validatorAddress, uint256 _stakingBalance) external {
+    function addValidator(address _validatorAddress, uint256 _stakingBalance) external nonReentrant{
         require(validators[_validatorAddress].validatorAddress == address(0), "Validator already exists");
         require(_stakingBalance > 0 , "staking balance has to be above 0");
         TransferHelper.safeTransferFrom(
@@ -26,7 +31,7 @@ contract ValidatorSelection {
 
     // Function to update the staking balance of a validator
     // Needs approval incase the new staking balance is smaller than the old one
-    function updateStakingBalance(address _validatorAddress, uint256 _newStakingBalance) external {
+    function updateStakingBalance(address _validatorAddress, uint256 _newStakingBalance) external nonReentrant{
         require(validators[_validatorAddress].validatorAddress != address(0), "Validator does not exist");
         require(_newStakingBalance > 0, "staking balance has to be above 0");
         uint _stakingBalance = validators[_validatorAddress].stakingBalance;
@@ -44,7 +49,7 @@ contract ValidatorSelection {
     }
 
     // Function to remove a validator
-    function removeValidator(address _validatorAddress) external {
+    function removeValidator(address _validatorAddress) external nonReentrant{
         require(validators[_validatorAddress].validatorAddress != address(0), "Validator does not exist");
         TransferHelper.safeTransfer(guild_token_address, _validatorAddress, validators[_validatorAddress].stakingBalance);
         removeValidatorFromQueue(_validatorAddress);
@@ -90,4 +95,5 @@ contract ValidatorSelection {
         
         validatorQueue.pop(); // Remove the last element from the array
     }
+
 }
