@@ -19,3 +19,14 @@
  * In case of a dispute, the assigned third party is delegated to resolve it and acquires the entire 10% of the freelancer stake.
 
 * Percentage amounts acquired by third parties will be capped at a certain amount.
+
+## Sepolia Addresses:
+
+    *GuildToken Contract 0xEddbff942993172BD7b2D4cCC97002E5F4F71710
+
+    *ValidatorSelection Contract 0x786CE1f8BBF95586D925c7Ac34716D8EEDCa4E74
+
+    *Client Interface Contract 0x68BFb0206dc8EcE863a256d0206d215643142eE6
+
+## Chainlink Automation link:
+    * https://automation.chain.link/sepolia/89582693822325869782582331309543088720413532222262009077480880623477895835351
